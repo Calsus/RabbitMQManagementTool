@@ -10,8 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import lombok.Getter;
 import org.apache.camel.CamelExecutionException;
 import org.slf4j.Logger;
@@ -36,7 +36,15 @@ public class RabbitMQManagementToolController {
 
 	@FXML
 	@Getter
-	private Pane rootPane;
+	private TabPane rootTabPane;
+
+	@FXML
+	@Getter
+	private Tab sendTab;
+
+	@FXML
+	@Getter
+	private AnchorPane sendPane;
 
 	@FXML
 	@Getter

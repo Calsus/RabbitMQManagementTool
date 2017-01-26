@@ -27,13 +27,14 @@ public class RabbitMQManagementTool extends Application {
 		// Create a Scene
 		RabbitMQManagementToolController rabbitMQManagementToolController = context.getBean(RabbitMQManagementToolController.class);
 		rabbitMQManagementToolController.loadQueueComboBox(queueNames);
-		Scene scene = new Scene(rabbitMQManagementToolController.getRootPane());
+		Scene scene = new Scene(rabbitMQManagementToolController.getRootTabPane());
 
 		//Setting window title and window width + height
 		stage.setTitle("RabbitMQ Management Tool");
-		stage.setWidth(485D);
-		stage.setHeight(575D);
+		stage.setWidth(525D);
+		stage.setHeight(600D);
 		stage.setScene(scene);
+		stage.setMaximized(true);
 		stage.show();
 	}
 
