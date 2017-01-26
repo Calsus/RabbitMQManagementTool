@@ -1,6 +1,6 @@
-# RabbitMQ Message Publisher
+# RMT - RabbitMQ Management Tool
 
-## About RabbitMQ Message Publisher
+## About RabbitMQ Management Tool
 
 The RabbitMQ MessagePublisher is a tool for testers to:
 
@@ -14,11 +14,11 @@ The RabbitMQ MessagePublisher is a tool for testers to:
 
 ## Running the project
 
-### Running RabbitMQMessagePublisher locally
+### Running RabbitMQ Management Tool locally
 
 * Start up docker containing the RabbitMQ: 
     * docker-compose up
-* Run the RabbitMQMessagePublisher.jar file from the target folder
+* Run the RabbitMQManagementTool.jar file from the target folder
 
 
 ## Using the application
