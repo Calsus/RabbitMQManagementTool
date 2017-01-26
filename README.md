@@ -2,7 +2,7 @@
 
 ## About RabbitMQ Management Tool
 
-The RabbitMQ MessagePublisher is a tool for testers to:
+The RabbitMQ Management Tool is a tool for testers to:
 
 * easily publish a message on a specific queue
 * easily add headers to a message
