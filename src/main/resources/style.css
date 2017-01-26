@@ -1,0 +1,9 @@
+.rootPane {
+    -fx-font-size: 12px;
+    -fx-font-family: 'Lucida Sans Typewriter';
+}
+
+.subtitle {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Lucida Sans Typewriter';
+}
