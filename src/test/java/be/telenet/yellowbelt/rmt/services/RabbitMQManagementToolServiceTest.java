@@ -1,7 +1,7 @@
 package be.telenet.yellowbelt.rmt.services;
 
 import be.telenet.yellowbelt.rmt.models.RabbitMQHeader;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Tests the sending of a message.
