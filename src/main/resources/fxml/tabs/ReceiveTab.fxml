@@ -4,7 +4,6 @@
 
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.layout.Pane?>
-
 <Tab fx:id="receiveTab" closable="false" text="Receive"
 	 xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
 	 fx:controller="be.telenet.yellowbelt.rmt.controllers.ReceiveTabController">

@@ -1,6 +1,5 @@
 package be.telenet.yellowbelt.rmt.controllers;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 /**
