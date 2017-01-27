@@ -1,5 +1,7 @@
 package be.telenet.yellowbelt.rmt.components.custom;
 
+import be.telenet.yellowbelt.rmt.models.Header;
+import be.telenet.yellowbelt.rmt.models.Message;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -10,8 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
+ * FMXL Component to display Message Information.
+ *
  * Created by Jamy-Lee on 27/01/2017.
  */
 public class MessageComponent extends VBox {
@@ -33,7 +40,7 @@ public class MessageComponent extends VBox {
 
 	@FXML
 	@Getter
-	private Label messageRemainingLabel;
+	private Label messagesRemainingLabel;
 
 	public MessageComponent() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -41,5 +48,34 @@ public class MessageComponent extends VBox {
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 		fxmlLoader.load();
+	}
+
+	/**
+	 * Creates and instance of {@link MessageComponent} with the data of the given message
+	 *
+	 * @param message An instance of {@link Message}
+	 * @return an instance of {@link MessageComponent}
+	 * @throws IOException
+	 */
+	public static MessageComponent createComponent(Message message) throws IOException {
+		MessageComponent component = new MessageComponent();
+		component.getContentTextArea().setText(message.getContent());
+
+		for (Header header : message.getHeaders().stream()
+			.filter(header -> !header.getKey().startsWith("rabbitmq."))
+			.collect(Collectors.toList())) {
+			component.getHeadersVBox().getChildren().add(HeaderComponent.createComponent(header));
+		}
+		return component;
+	}
+
+	public MessageComponent setMessageLabel(String messagel) {
+		this.getMessageLabel().setText(message);
+		return this;
+	}
+
+	public MessageComponent setMessagesRemainingLabel(String messagesRemaining) {
+		this.getMessagesRemainingLabel().setText(messagesRemaining);
+		return this;
 	}
 }

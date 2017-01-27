@@ -1,7 +1,9 @@
 package be.telenet.yellowbelt.rmt.controllers;
 
 import be.telenet.yellowbelt.rmt.components.custom.MessageComponent;
-import be.telenet.yellowbelt.rmt.components.custom.RabbitMQHeaderComponent;
+import be.telenet.yellowbelt.rmt.components.custom.HeaderComponent;
+import be.telenet.yellowbelt.rmt.models.Header;
+import be.telenet.yellowbelt.rmt.models.Message;
 import be.telenet.yellowbelt.rmt.services.RabbitMQManagementToolService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -9,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.apache.camel.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
@@ -73,46 +73,40 @@ public class ReceiveTabController {
 	public void receiveMessages() {
 		try {
 			String queue = queueComboBox.getValue();
-			List<Message> messages = service.receiveMessages(queue);
+			List<org.apache.camel.Message> messages = service.receiveMessages(queue);
 			this.messagesVBox.getChildren().clear();
 			messages.forEach(this::logDebugMessageInfo);
 			int count = 1;
-			for (Message message : messages) {
-				MessageComponent messageComponent = this.createMessageComponentAndAddToMessagesVBox(message);
-				messageComponent.getMessageLabel().setText(String.format("Message %d:", count));
-				messageComponent.getMessageRemainingLabel().setText(String.format("Messages remaining: %d", messages.size() - count));
-				messageComponent.getContentTextArea().setText(message.getBody(String.class));
-				this.messagesVBox.getChildren().add(messageComponent);
+
+			for (org.apache.camel.Message message : messages) {
+				this.messagesVBox.getChildren().add(
+					MessageComponent.createComponent(this.convertCamelMessageToRabbitMQMessage(message))
+						.setMessageLabel(String.format("Message %d:", count))
+						.setMessagesRemainingLabel(String.format("Messages remaining: %d", messages.size() - count)));
 				count++;
 			}
-			;
 		} catch (Throwable t) {
 			createAndShowExceptionDialog(t);
 		}
 
 	}
 
-	private MessageComponent createMessageComponentAndAddToMessagesVBox(Message message) throws IOException {
-		MessageComponent messageComponent = new MessageComponent();
-		Set<Entry<String, Object>> filteredHeaders = this.filterOutRabbitMQHeaders(message.getHeaders().entrySet());
-		for (Entry<String, Object> entry : filteredHeaders) {
-			messageComponent.getHeadersVBox().getChildren().add(this.createHeaderComponent(entry));
-		}
-		return messageComponent;
+	private Message convertCamelMessageToRabbitMQMessage(org.apache.camel.Message message) {
+		return new Message(message.getBody(String.class),
+			this.convertCamelMessageHeadersToRabbitMQHeaders(message.getHeaders()));
 	}
 
-	private Set<Entry<String, Object>> filterOutRabbitMQHeaders(Set<Entry<String, Object>> entries) {
-		return entries.stream().filter(entry -> !entry.getKey().startsWith("rabbitmq.")).collect(Collectors.toSet());
+	private List<Header> convertCamelMessageHeadersToRabbitMQHeaders(Map<String, Object> camelMessageHeaders) {
+		return camelMessageHeaders.entrySet().stream()
+			.map(this::convertCamelMessageHeaderToRabbitMQHeader)
+			.collect(Collectors.toList());
 	}
 
-	private RabbitMQHeaderComponent createHeaderComponent(Entry<String, Object> entry) throws IOException {
-		RabbitMQHeaderComponent headerComponent = new RabbitMQHeaderComponent();
-		headerComponent.getKeyText().setText(String.format("%s: ", entry.getKey()));
-		headerComponent.getValueText().setText(String.format("%s", entry.getValue()));
-		return headerComponent;
+	private Header convertCamelMessageHeaderToRabbitMQHeader(Entry<String, Object> camelMessageHeader) {
+		return new Header(camelMessageHeader.getKey(), String.valueOf(camelMessageHeader.getValue()));
 	}
 
-	private void logDebugMessageInfo(Message message) {
+	private void logDebugMessageInfo(org.apache.camel.Message message) {
 		LOGGER.debug(message.getBody(String.class));
 		message.getHeaders().entrySet().stream().filter(entry -> !entry.getKey().startsWith("rabbitmq."))
 			.map(entry -> String.format("Header key: %s %n Header value: %s", entry.getKey(), entry.getValue()))
