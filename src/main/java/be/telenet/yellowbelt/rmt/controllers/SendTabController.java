@@ -34,6 +34,7 @@ import static javafx.scene.layout.Priority.ALWAYS;
 public class SendTabController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQManagementToolController.class);
+
 	@Value("${queue.names}")
 	private String[] queueNames;
 

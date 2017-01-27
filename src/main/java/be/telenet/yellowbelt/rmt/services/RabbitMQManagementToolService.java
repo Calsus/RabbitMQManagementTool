@@ -1,8 +1,7 @@
 package be.telenet.yellowbelt.rmt.services;
 
 import be.telenet.yellowbelt.rmt.models.RabbitMQHeader;
-import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
+import org.apache.camel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,10 +56,37 @@ public class RabbitMQManagementToolService {
 
 		String endpoint = rabbitMQEndpoint + hostname + ":" + port + "/" + extractExchangeNameFromQueue(queue) + "?exchangeType=fanout&bridgeEndpoint=true&queue=" + queue;
 
-		LOGGER.debug("Endpoint: " + endpoint);
+		LOGGER.debug("Send Endpoint: " + endpoint);
 
 		template.sendBodyAndHeaders(endpoint, content, headerMap);
 
+	}
+
+	/**
+	 * <p>Receive messages from a RabbitMQ queue.</p>
+	 *
+	 * @param queueName Name of the queue
+	 * @return a list of {@link Message}
+	 */
+	public List<Message> receiveMessages(String queueName) throws Exception {
+		String endpoint = rabbitMQEndpoint + hostname + ":" + port + "/" + extractExchangeNameFromQueue(queueName) + "?exchangeType=fanout&bridgeEndpoint=true&queue=" + queueName;
+
+		LOGGER.debug("Send Endpoint: " + endpoint);
+
+		List<Message> messages = new ArrayList<>();
+		ConsumerTemplate consumer = camelContext.createConsumerTemplate();
+		consumer.start();
+		while (true) {
+			Exchange exchange = consumer.receive(endpoint, 1000);
+			if (exchange != null) {
+				Message message = exchange.getIn();
+				messages.add(message);
+			} else {
+				break;
+			}
+		}
+		consumer.stop();
+		return messages;
 	}
 
 	String extractExchangeNameFromQueue(String queue) {
