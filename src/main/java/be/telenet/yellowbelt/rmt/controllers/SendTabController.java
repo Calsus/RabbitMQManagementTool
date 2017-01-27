@@ -28,7 +28,7 @@ import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static javafx.scene.layout.Priority.ALWAYS;
 
 /**
- * Created by Jamy-Lee on 26/01/2017.
+ * Created by Jerry-Lee on 26/01/2017.
  */
 @Controller
 public class SendTabController {

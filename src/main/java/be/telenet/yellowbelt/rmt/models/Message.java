@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jamy-Lee on 27/01/2017.
+ * Model containing the content and the headers of a message.
+ * <p>
+ * Created by Jerry-Lee on 27/01/2017.
  */
 @Data
 public class Message {

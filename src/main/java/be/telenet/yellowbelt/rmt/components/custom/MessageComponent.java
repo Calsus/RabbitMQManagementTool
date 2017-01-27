@@ -12,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * FMXL Component to display Message Information.
- *
- * Created by Jamy-Lee on 27/01/2017.
+ * <p>
+ * Created by Jerry-Lee on 27/01/2017.
  */
 public class MessageComponent extends VBox {
 	private String messagesRemaining = "Messages Remaining: 0";

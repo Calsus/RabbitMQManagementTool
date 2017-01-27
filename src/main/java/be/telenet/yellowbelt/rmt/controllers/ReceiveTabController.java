@@ -1,7 +1,6 @@
 package be.telenet.yellowbelt.rmt.controllers;
 
 import be.telenet.yellowbelt.rmt.components.custom.MessageComponent;
-import be.telenet.yellowbelt.rmt.components.custom.HeaderComponent;
 import be.telenet.yellowbelt.rmt.models.Header;
 import be.telenet.yellowbelt.rmt.models.Message;
 import be.telenet.yellowbelt.rmt.services.RabbitMQManagementToolService;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
@@ -29,7 +27,7 @@ import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.layout.Priority.ALWAYS;
 
 /**
- * Created by Jamy-Lee on 26/01/2017.
+ * Created by Jerry-Lee on 26/01/2017.
  */
 @Controller
 public class ReceiveTabController {
