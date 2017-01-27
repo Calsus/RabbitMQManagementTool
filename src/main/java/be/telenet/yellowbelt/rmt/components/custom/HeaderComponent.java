@@ -10,6 +10,8 @@ import lombok.Getter;
 import java.io.IOException;
 
 /**
+ * FMXL Component to display Header Information.
+ * <p>
  * Created by Jerry-Lee on 27/01/2017.
  */
 public class HeaderComponent extends HBox {
