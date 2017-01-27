@@ -8,15 +8,15 @@ import lombok.Data;
  * Created by Jerry-Lee on 23/01/2017.
  */
 @Data
-public class RabbitMQHeader {
+public class Header {
 	private String key;
 	private String value;
 
-	public RabbitMQHeader() {
+	public Header() {
 		this("", "");
 	}
 
-	public RabbitMQHeader(String key, String value) {
+	public Header(String key, String value) {
 		this.key = key;
 		this.value = value;
 	}

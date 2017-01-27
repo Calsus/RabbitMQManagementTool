@@ -1,6 +1,6 @@
 package be.telenet.yellowbelt.rmt.eventhandlers;
 
-import be.telenet.yellowbelt.rmt.models.RabbitMQHeader;
+import be.telenet.yellowbelt.rmt.models.Header;
 
 /**
  * EventHandler to handling the OnEditEvent of the Value Cell
@@ -11,11 +11,11 @@ public class ValueCellOnEditEventHandler extends CellOnEditEventHandler {
 	/**
 	 * Sets the property value of the given header to the newValue
 	 *
-	 * @param header   {@link RabbitMQHeader}
+	 * @param header   {@link Header}
 	 * @param newValue the new value give by the user.
 	 */
 	@Override
-	public void setNewValue(RabbitMQHeader header, String newValue) {
+	public void setNewValue(Header header, String newValue) {
 		header.setValue(newValue);
 	}
 }

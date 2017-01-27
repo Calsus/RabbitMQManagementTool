@@ -1,8 +1,7 @@
 package be.telenet.yellowbelt.rmt.services;
 
-import be.telenet.yellowbelt.rmt.models.RabbitMQHeader;
-import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
+import be.telenet.yellowbelt.rmt.models.Header;
+import org.apache.camel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,11 +44,11 @@ public class RabbitMQManagementToolService {
 	 * <li>Send the content and the valid headers to the RabbitMQ endpoint</li>
 	 * </ul>
 	 *
-	 * @param headers List of {@link RabbitMQHeader} containing all the headers that have to be added.
+	 * @param headers List of {@link Header} containing all the headers that have to be added.
 	 * @param content Content that have to be send with the message
 	 * @param queue   Name of the queue
 	 */
-	public void sendMessage(List<RabbitMQHeader> headers, String content, String queue) {
+	public void sendMessage(List<Header> headers, String content, String queue) {
 		logDebugHeaders(headers);
 
 		Map<String, Object> headerMap = getMapWithValidHeaders(headers);
@@ -56,10 +56,37 @@ public class RabbitMQManagementToolService {
 
 		String endpoint = rabbitMQEndpoint + hostname + ":" + port + "/" + extractExchangeNameFromQueue(queue) + "?exchangeType=fanout&bridgeEndpoint=true&queue=" + queue;
 
-		LOGGER.debug("Endpoint: " + endpoint);
+		LOGGER.debug("Send Endpoint: " + endpoint);
 
 		template.sendBodyAndHeaders(endpoint, content, headerMap);
 
+	}
+
+	/**
+	 * <p>Receive messages from a RabbitMQ queue.</p>
+	 *
+	 * @param queueName Name of the queue
+	 * @return a list of {@link Message}
+	 */
+	public List<Message> receiveMessages(String queueName) throws Exception {
+		String endpoint = rabbitMQEndpoint + hostname + ":" + port + "/" + extractExchangeNameFromQueue(queueName) + "?exchangeType=fanout&bridgeEndpoint=true&queue=" + queueName;
+
+		LOGGER.debug("Send Endpoint: " + endpoint);
+
+		List<Message> messages = new ArrayList<>();
+		ConsumerTemplate consumer = camelContext.createConsumerTemplate();
+		consumer.start();
+		while (true) {
+			Exchange exchange = consumer.receive(endpoint, 1000);
+			if (exchange != null) {
+				Message message = exchange.getIn();
+				messages.add(message);
+			} else {
+				break;
+			}
+		}
+		consumer.stop();
+		return messages;
 	}
 
 	String extractExchangeNameFromQueue(String queue) {
@@ -69,21 +96,21 @@ public class RabbitMQManagementToolService {
 	/**
 	 * This method will filter out the invalid headers and then convert it a Map of String, Object.
 	 *
-	 * @param headers List of {@link RabbitMQHeader}
+	 * @param headers List of {@link Header}
 	 * @return returns a Map of String, Object because the method {@link ProducerTemplate#sendBodyAndHeaders(String, Object, Map)} requires it.
 	 **/
-	Map<String, Object> getMapWithValidHeaders(List<RabbitMQHeader> headers) {
-		return headers.stream().filter(this::isValidHeader).collect(Collectors.toMap(RabbitMQHeader::getKey, RabbitMQHeader::getValue));
+	Map<String, Object> getMapWithValidHeaders(List<Header> headers) {
+		return headers.stream().filter(this::isValidHeader).collect(Collectors.toMap(Header::getKey, Header::getValue));
 	}
 
-	boolean isValidHeader(RabbitMQHeader header) {
+	boolean isValidHeader(Header header) {
 		return !StringUtils.isEmpty(header.getKey()) && !StringUtils.isEmpty(header.getValue());
 	}
 
-	private void logDebugHeaders(List<RabbitMQHeader> headers) {
+	private void logDebugHeaders(List<Header> headers) {
 		headers.stream()
 			.filter(this::isValidHeader)
-			.map(RabbitMQHeader::toString)
+			.map(Header::toString)
 			.collect(Collectors.toList())
 			.forEach(LOGGER::debug);
 	}

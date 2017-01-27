@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TabPane?>
-<TabPane fx:id="tabPane" minHeight="575.0" minWidth="500.0" styleClass="rootPane"
+<TabPane fx:id="tabPane" minHeight="575.0" minWidth="500.0" styleClass="rootPane" stylesheets="@../../css/style.css"
 		 xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
 		 fx:controller="be.telenet.yellowbelt.rmt.controllers.TabPaneController">
 	<fx:include fx:id="sendTab" source="SendTab.fxml"/>
 	<fx:include fx:id="receiveTab" source="ReceiveTab.fxml"/>
+
 </TabPane>
