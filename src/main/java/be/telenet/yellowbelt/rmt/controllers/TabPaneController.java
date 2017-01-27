@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 /**
- * Created by Jamy-Lee on 26/01/2017.
+ * Created by Jerry-Lee on 26/01/2017.
  */
 @Controller
 public class TabPaneController {

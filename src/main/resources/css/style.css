@@ -5,5 +5,11 @@
 
 .subtitle {
     -fx-font-size: 20px;
-    -fx-font-family: 'Lucida Sans Typewriter';
+}
+.subsubtitle {
+	-fx-font-size: 18px;
+}
+
+.headerKey {
+	-fx-font-weight: bold;
 }

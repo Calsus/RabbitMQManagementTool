@@ -2,11 +2,32 @@
 
 <?scenebuilder-stylesheet style.css?>
 
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <Tab fx:id="receiveTab" closable="false" text="Receive"
 	 xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
 	 fx:controller="be.telenet.yellowbelt.rmt.controllers.ReceiveTabController">
-	<Pane fx:id="receivePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+	<AnchorPane fx:id="receivePane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+		<VBox prefHeight="524.0" prefWidth="450.0" spacing="5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+			  AnchorPane.topAnchor="0.0">
+			<padding>
+				<Insets left="10.0" top="10.0"/>
+			</padding>
+			<Label fx:id="queueLabel" styleClass="subtitle" text="Queues"/>
+			<HBox spacing="5">
+				<ComboBox fx:id="queueComboBox" onAction="#receiveMessages" prefHeight="25.0" prefWidth="349.0"/>
+				<Button fx:id="refreshButton" alignment="CENTER" onAction="#receiveMessages" prefHeight="25.0"
+						prefWidth="98.0" text="Refresh">
+					<HBox.margin>
+						<Insets left="50.0"/>
+					</HBox.margin>
+				</Button>
+			</HBox>
+			<Separator/>
+			<ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="500.0">
+				<VBox fx:id="messagesVBox"/>
+			</ScrollPane>
+		</VBox>
+	</AnchorPane>
 </Tab>
-

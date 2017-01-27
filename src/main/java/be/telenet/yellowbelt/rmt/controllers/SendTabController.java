@@ -2,7 +2,7 @@ package be.telenet.yellowbelt.rmt.controllers;
 
 import be.telenet.yellowbelt.rmt.eventhandlers.KeyCellOnEditEventHandler;
 import be.telenet.yellowbelt.rmt.eventhandlers.ValueCellOnEditEventHandler;
-import be.telenet.yellowbelt.rmt.models.RabbitMQHeader;
+import be.telenet.yellowbelt.rmt.models.Header;
 import be.telenet.yellowbelt.rmt.services.RabbitMQManagementToolService;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -28,12 +28,13 @@ import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static javafx.scene.layout.Priority.ALWAYS;
 
 /**
- * Created by Jamy-Lee on 26/01/2017.
+ * Created by Jerry-Lee on 26/01/2017.
  */
 @Controller
 public class SendTabController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQManagementToolController.class);
+
 	@Value("${queue.names}")
 	private String[] queueNames;
 
@@ -54,7 +55,7 @@ public class SendTabController {
 
 	@FXML
 	@Getter
-	private TableView<RabbitMQHeader> headerTable;
+	private TableView<Header> headerTable;
 
 	@FXML
 	@Getter
@@ -120,7 +121,7 @@ public class SendTabController {
 	 */
 	private void initColumn(TableColumn column, String property, EventHandler eventHandler) {
 		//Setting the CellValueFactory to the property key so that any changes will be put in this property.
-		column.setCellValueFactory(new PropertyValueFactory<RabbitMQHeader, String>(property));
+		column.setCellValueFactory(new PropertyValueFactory<Header, String>(property));
 
 		//Setting the CellFactory to a TextFieldTableCellFactory so that we can edit the cell.
 		column.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -134,18 +135,18 @@ public class SendTabController {
 	 */
 	private void initTableData() {
 		headerTable.setItems(FXCollections.observableArrayList(
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader(),
-			new RabbitMQHeader()
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header(),
+			new Header()
 		));
 	}
 

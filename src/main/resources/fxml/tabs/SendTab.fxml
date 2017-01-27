@@ -25,9 +25,7 @@
 				</columnResizePolicy>
 			</TableView>
 			<Label fx:id="contentLabel" styleClass="subtitle" text="Content"/>
-			<TextArea fx:id="contentTextArea">
-
-			</TextArea>
+			<TextArea fx:id="contentTextArea"/>
 			<Label fx:id="queueLabel" styleClass="subtitle" text="Queues"/>
 			<HBox spacing="5">
 				<ComboBox fx:id="queueComboBox" prefHeight="25.0" prefWidth="349.0"
