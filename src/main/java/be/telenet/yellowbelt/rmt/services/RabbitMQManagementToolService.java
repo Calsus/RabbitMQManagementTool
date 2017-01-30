@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class RabbitMQManagementToolService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQManagementToolService.class);
 
+
 	@Autowired
 	private CamelContext camelContext;
 
@@ -73,20 +74,22 @@ public class RabbitMQManagementToolService {
 
 		LOGGER.debug("Send Endpoint: " + endpoint);
 
-		List<Message> messages = new ArrayList<>();
+		List<Exchange> exchanges = new ArrayList<>();
 		ConsumerTemplate consumer = camelContext.createConsumerTemplate();
 		consumer.start();
+		ProducerTemplate producer = camelContext.createProducerTemplate();
 		while (true) {
 			Exchange exchange = consumer.receive(endpoint, 1000);
 			if (exchange != null) {
-				Message message = exchange.getIn();
-				messages.add(message);
+				exchanges.add(exchange);
 			} else {
 				break;
 			}
 		}
 		consumer.stop();
-		return messages;
+		exchanges.forEach(exchange -> producer.send(endpoint, exchange));
+
+		return exchanges.stream().map(Exchange::getIn).collect(Collectors.toList());
 	}
 
 	String extractExchangeNameFromQueue(String queue) {

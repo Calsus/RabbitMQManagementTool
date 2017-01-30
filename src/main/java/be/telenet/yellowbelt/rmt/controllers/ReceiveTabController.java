@@ -6,8 +6,9 @@ import be.telenet.yellowbelt.rmt.models.Message;
 import be.telenet.yellowbelt.rmt.services.RabbitMQManagementToolService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -16,15 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static javafx.scene.control.Alert.AlertType.ERROR;
-import static javafx.scene.layout.Priority.ALWAYS;
+import static be.telenet.yellowbelt.rmt.helpers.DialogHelper.createAndShowExceptionDialog;
+import static be.telenet.yellowbelt.rmt.helpers.DialogHelper.createAndShowSuccessDialog;
 
 /**
  * Created by Jerry-Lee on 26/01/2017.
@@ -83,6 +82,7 @@ public class ReceiveTabController {
 						.setMessagesRemainingLabel(String.format("Messages remaining: %d", messages.size() - count)));
 				count++;
 			}
+			createAndShowSuccessDialog("The messages are successfully retrieved from the queue: " + queue);
 		} catch (Throwable t) {
 			createAndShowExceptionDialog(t);
 		}
@@ -111,43 +111,5 @@ public class ReceiveTabController {
 			.collect(Collectors.toList())
 			.forEach(LOGGER::debug);
 	}
-
-	/**
-	 * Creates and show an Exception Dialog that display the error message and stacktrace to the user.
-	 */
-	private void createAndShowExceptionDialog(Throwable e) {
-		Alert alert = new Alert(ERROR);
-		alert.setTitle("Error");
-		alert.setHeaderText(null);
-		alert.setContentText(e.getMessage());
-
-		// Create expandable Exception.
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		String exceptionText = sw.toString();
-
-		Label label = new Label("The exception stacktrace was:");
-
-		TextArea textArea = new TextArea(exceptionText);
-		textArea.setEditable(false);
-		textArea.setWrapText(true);
-
-		textArea.setMaxWidth(Double.MAX_VALUE);
-		textArea.setMaxHeight(Double.MAX_VALUE);
-		GridPane.setVgrow(textArea, ALWAYS);
-		GridPane.setHgrow(textArea, ALWAYS);
-
-		GridPane expContent = new GridPane();
-		expContent.setMaxWidth(Double.MAX_VALUE);
-		expContent.add(label, 0, 0);
-		expContent.add(textArea, 0, 1);
-
-		// Set expandable Exception into the dialog pane.
-		alert.getDialogPane().setExpandableContent(expContent);
-
-		alert.showAndWait();
-	}
-
 
 }

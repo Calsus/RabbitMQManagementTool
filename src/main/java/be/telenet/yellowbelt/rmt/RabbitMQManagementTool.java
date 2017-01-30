@@ -25,7 +25,6 @@ public class RabbitMQManagementTool extends Application {
 
 	private ConfigurableApplicationContext applicationContext;
 
-
 	@Override
 	public void start(Stage stage) throws Exception {
 		//Setting window title and window width + height
@@ -53,4 +52,5 @@ public class RabbitMQManagementTool extends Application {
 	public void stop() throws Exception {
 		applicationContext.close();
 	}
+
 }
